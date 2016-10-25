@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 	<title>手机版示例</title>
 	<style>
 		body {
@@ -48,8 +48,8 @@
 
 		scene = new THREE.Scene();
 
-		var ambient = new THREE.AmbientLight( 0xffffff );
-		scene.add( ambient );
+		// var ambient = new THREE.AmbientLight( 0x000000 );
+		// scene.add( ambient );
 
 		var directionalLight = new THREE.DirectionalLight( 0xffffff );
 		directionalLight.position.set( 0, 0, 1 ).normalize();
