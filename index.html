@@ -28,6 +28,8 @@
 
 	var Obj;
 
+	var St = +(new Date());
+
 	var mouseX = 0, mouseY = 0;
 
 	var windowHalfX = window.innerWidth / 2;
@@ -77,10 +79,19 @@
 			var objLoader = new THREE.OBJLoader();
 			objLoader.setMaterials( materials );
 			objLoader.setPath( 'obj/' );
-			objLoader.load( 'ball.obj', function ( object ) {
-				//console.log(object.children[1]);
+			objLoader.load( '蓝绿色星球2.obj', function ( object ) {
 				Obj = object;
-				object.position.z = -400;
+				Obj.children.forEach(function(o){
+					o.scale.x = .1;
+					o.scale.y = .1;
+					o.scale.z = .1;
+					o.add = {
+						x: (Math.random()<0.5?0:0.01),
+						y: (Math.random()<0.5?0:0.01),
+						z: (Math.random()<0.5?0:0.01)
+					};
+				});
+				object.position.z = -700;
 				scene.add( object );
 
 			}, onProgress, onError );
@@ -134,7 +145,26 @@
 
 		// camera.position.x += ( mouseX - camera.position.x ) * .05;
 		// camera.position.y += ( - mouseY - camera.position.y ) * .05;
-		if(Obj)Obj.children[0].rotation.y += .01;
+		if(Obj&&Obj.children[0].scale.x<1){
+			// 匀加速运动
+			var Ct = +(new Date());
+			var v = .0001 * (Ct-St);
+			Obj.children.forEach(function(o){
+					o.scale.x += v;
+					if(o.scale.x>1)o.scale.x = 1;
+					o.scale.y += v;
+					if(o.scale.y>1)o.scale.y = 1;
+					o.scale.z += v;
+					if(o.scale.z>1)o.scale.z = 1;
+					o.rotation.y += 0.01;
+				});
+		} else if(Obj){
+			Obj.children.forEach(function(o,i){
+				o.rotation.x += o.add.x;
+				o.rotation.y += o.add.y;
+				o.rotation.z += o.add.z;
+			});
+		}
 		camera.lookAt( scene.position );
 
 		renderer.render( scene, camera );
