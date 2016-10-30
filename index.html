@@ -25,6 +25,15 @@
 				text-align: center;
 				border-radius: 5px;
 			}
+			#close{
+				position: absolute;
+				padding: 5px 20px;
+				border-radius: 5px;
+				right: 0;
+				top: -40px;
+				text-align:center;
+				background: rgba(255,255,255,.7);
+			}
 	</style>
 </head>
 <!--three.js库文件-->
@@ -37,7 +46,8 @@
 <script src="loaders/OBJLoader.js"></script>
 <body>
 	<div id="layer">
-		这是一个弹窗示例
+		<p id="content">这是一个弹窗示例</p>
+		<div id="close">关闭</div>
 	</div>
 </body>
 <script>
@@ -49,6 +59,8 @@
 	mouse.y = -9999;
 	var Obj;
 	var layer = document.getElementById('layer');
+	var content =  document.getElementById('content');
+	var close =  document.getElementById('close');
 	var St = +(new Date());
 
 	var windowHalfX = window.innerWidth / 2;
@@ -63,7 +75,7 @@
 		document.body.appendChild( container );
 
 		camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
-		camera.position.z = 250;
+		camera.position.z = 50;
 
 		// scene
 
@@ -102,11 +114,6 @@
 				console.log(Obj);
 				Obj.children.forEach(function(o){
 					o.material = o.material.clone();
-					o.add = {
-						x: (Math.random()<0.5?0:0.01),
-						y: (Math.random()<0.5?0:0.01),
-						z: (Math.random()<0.5?0:0.01)
-					};
 				});
 				object.position.z = -700;
 				scene.add( object );
@@ -121,6 +128,12 @@
 
 		document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 		document.addEventListener('touchstart',onDocumentTouchDown, false);
+		close.addEventListener( 'mousedown', function(event){
+			layer.style.visibility = 'hidden';
+		}, false );
+		close.addEventListener('touchstart', function(event){
+			layer.style.visibility = 'hidden';
+		}, false);
 
 		window.addEventListener( 'resize', onWindowResize, false );
 
@@ -164,11 +177,7 @@
 		// camera.position.x += ( mouseX - camera.position.x ) * .05;
 		// camera.position.y += ( - mouseY - camera.position.y ) * .05;
 		if(!Obj) return;
-		// Obj.children.forEach(function(o,i){
-		// 	o.rotation.x += o.add.x;
-		// 	o.rotation.y += o.add.y;
-		// 	o.rotation.z += o.add.z;
-		// });
+		Obj.rotation.y += .005;
 		// find intersections
 
 		raycaster.setFromCamera( mouse, camera );
@@ -181,14 +190,13 @@
 				if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
 
 				INTERSECTED = intersects[ 0 ].object;
-				layer.innerHTML = INTERSECTED.name + "被点击";
+				content.innerHTML = INTERSECTED.name + "被点击";
 				layer.style.visibility = "visible";
 				INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
 				INTERSECTED.material.emissive.setHex( 0xff0000 );
 			}
 
 		} else {
-			layer.style.visibility = "hidden";
 			if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
 
 			INTERSECTED = null;
