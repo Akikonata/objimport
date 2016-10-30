@@ -54,8 +54,6 @@
 	var windowHalfX = window.innerWidth / 2;
 	var windowHalfY = window.innerHeight / 2;
 
-	var moveEvt = "ontouchmove" in document ? "touchmove":"mousemove";
-	var clickEvt = "ontouchstart" in document ? "touchstart":"mousedown";
 	init();
 	animate();
 
@@ -101,6 +99,7 @@
 			objLoader.setPath( 'obj/' );
 			objLoader.load( '蓝绿色星球2.obj', function ( object ) {
 				Obj = object;
+				console.log(Obj);
 				Obj.children.forEach(function(o){
 					o.material = o.material.clone();
 					o.add = {
@@ -115,15 +114,13 @@
 
 		});
 
-		//
-
 		renderer = new THREE.WebGLRenderer();
 		renderer.setPixelRatio( window.devicePixelRatio );
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		container.appendChild( renderer.domElement );
 
 		document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-		document.addEventListener('touchdown',onDocumentTouchDown, false);
+		document.addEventListener('ontouchstart',onDocumentTouchDown, false);
 
 		window.addEventListener( 'resize', onWindowResize, false );
 
@@ -186,7 +183,6 @@
 				INTERSECTED = intersects[ 0 ].object;
 				layer.innerHTML = INTERSECTED.name + "被点击";
 				layer.style.visibility = "visible";
-				camera.lookAt(INTERSECTED.position);
 				INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
 				INTERSECTED.material.emissive.setHex( 0xff0000 );
 			}
