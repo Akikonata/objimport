@@ -104,17 +104,16 @@
 
 		var mtlLoader = new THREE.MTLLoader();
 		mtlLoader.setPath( 'obj/' );
-		mtlLoader.load( 'ball.mtl', function( materials ) {
+		mtlLoader.load( '蓝色球.mtl', function( materials ) {
 			materials.preload();
 			var objLoader = new THREE.OBJLoader();
 			objLoader.setMaterials( materials );
 			objLoader.setPath( 'obj/' );
-			objLoader.load( '蓝绿色星球2.obj', function ( object ) {
+			objLoader.load( '蓝色球.obj', function ( object ) {
 				Obj = object;
-				console.log(Obj);
-				Obj.children.forEach(function(o){
-					o.material = o.material.clone();
-				});
+				// Obj.children.forEach(function(o){
+				// 	o.material = o.material.clone();
+				// });
 				object.position.z = -700;
 				scene.add( object );
 			}, onProgress, onError );
