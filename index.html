@@ -36,10 +36,9 @@
 			}
 	</style>
 </head>
+<script src="zepto.min.js"></script>
 <!--three.js库文件-->
 <script src="three.min.js"></script>
-<!--用于加载dds格式的贴图文件-->
-<script src="loaders/DDSLoader.js"></script>
 <!--用于加载mtl格式的材质库文件-->
 <script src="loaders/MTLLoader.js"></script>
 <!--用于加载obj格式的模型网格文件-->
@@ -75,7 +74,7 @@
 		document.body.appendChild( container );
 
 		camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
-		camera.position.z = 50;
+		camera.position.z = 0;
 
 		// scene
 
@@ -100,8 +99,6 @@
 
 		var onError = function ( xhr ) { };
 
-		THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-
 		var mtlLoader = new THREE.MTLLoader();
 		mtlLoader.setPath( 'obj/' );
 		mtlLoader.load( '蓝色球.mtl', function( materials ) {
@@ -114,7 +111,6 @@
 				// Obj.children.forEach(function(o){
 				// 	o.material = o.material.clone();
 				// });
-				object.position.z = -700;
 				scene.add( object );
 			}, onProgress, onError );
 		});
@@ -125,7 +121,6 @@
 			objLoader.setPath( 'obj/' );
 			objLoader.load( '裂缝星球.obj', function ( object ) {
 				Objs.push(object);
-				object.position.z = -700;
 				scene.add( object );
 			}, onProgress, onError );
 		});
@@ -136,7 +131,6 @@
 			objLoader.setPath( 'obj/' );
 			objLoader.load( '小转星球.obj', function ( object ) {
 				Objs.push(object);
-				object.position.z = -700;
 				scene.add( object );
 			}, onProgress, onError );
 		});
@@ -147,12 +141,15 @@
 			objLoader.setPath( 'obj/' );
 			objLoader.load( '小刺.obj', function ( object ) {
 				Objs.push(object);
-				object.position.z = -700;
 				scene.add( object );
 			}, onProgress, onError );
 		});
-
-		renderer = new THREE.WebGLRenderer();
+		$('body').on('swipeDown', function(){
+			alert('aaa');
+		});
+		renderer = new THREE.WebGLRenderer({
+			antialias:true
+		});
 		renderer.setPixelRatio( window.devicePixelRatio );
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		container.appendChild( renderer.domElement );
