@@ -57,7 +57,7 @@
 	var mouse = new THREE.Vector2(), INTERSECTED;
 	mouse.x = -9999;
 	mouse.y = -9999;
-	var Obj;
+	var Objs = [];
 	var layer = document.getElementById('layer');
 	var content =  document.getElementById('content');
 	var close =  document.getElementById('close');
@@ -110,14 +110,46 @@
 			objLoader.setMaterials( materials );
 			objLoader.setPath( 'obj/' );
 			objLoader.load( '蓝色球.obj', function ( object ) {
-				Obj = object;
+				Objs.push(object);
 				// Obj.children.forEach(function(o){
 				// 	o.material = o.material.clone();
 				// });
 				object.position.z = -700;
 				scene.add( object );
 			}, onProgress, onError );
-
+		});
+		mtlLoader.load( '裂缝星球.mtl', function( materials ) {
+			materials.preload();
+			var objLoader = new THREE.OBJLoader();
+			objLoader.setMaterials( materials );
+			objLoader.setPath( 'obj/' );
+			objLoader.load( '裂缝星球.obj', function ( object ) {
+				Objs.push(object);
+				object.position.z = -700;
+				scene.add( object );
+			}, onProgress, onError );
+		});
+		mtlLoader.load( '小转星球.mtl', function( materials ) {
+			materials.preload();
+			var objLoader = new THREE.OBJLoader();
+			objLoader.setMaterials( materials );
+			objLoader.setPath( 'obj/' );
+			objLoader.load( '小转星球.obj', function ( object ) {
+				Objs.push(object);
+				object.position.z = -700;
+				scene.add( object );
+			}, onProgress, onError );
+		});
+		mtlLoader.load( '小刺.mtl', function( materials ) {
+			materials.preload();
+			var objLoader = new THREE.OBJLoader();
+			objLoader.setMaterials( materials );
+			objLoader.setPath( 'obj/' );
+			objLoader.load( '小刺.obj', function ( object ) {
+				Objs.push(object);
+				object.position.z = -700;
+				scene.add( object );
+			}, onProgress, onError );
 		});
 
 		renderer = new THREE.WebGLRenderer();
@@ -175,32 +207,32 @@
 
 		// camera.position.x += ( mouseX - camera.position.x ) * .05;
 		// camera.position.y += ( - mouseY - camera.position.y ) * .05;
-		if(!Obj) return;
-		Obj.rotation.y += .005;
+		// if(!Obj) return;
+		// Obj.rotation.y += .005;
 		// find intersections
 
-		raycaster.setFromCamera( mouse, camera );
+		// raycaster.setFromCamera( mouse, camera );
 
-		var intersects = raycaster.intersectObjects( scene.children[1].children );
+		// var intersects = raycaster.intersectObjects( scene.children[1].children );
 
-		if ( intersects.length > 0 ) {
-			if ( INTERSECTED != intersects[ 0 ].object ) {
+		// if ( intersects.length > 0 ) {
+		// 	if ( INTERSECTED != intersects[ 0 ].object ) {
 
-				if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+		// 		if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
 
-				INTERSECTED = intersects[ 0 ].object;
-				content.innerHTML = INTERSECTED.name + "被点击";
-				layer.style.visibility = "visible";
-				INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-				INTERSECTED.material.emissive.setHex( 0xff0000 );
-			}
+		// 		INTERSECTED = intersects[ 0 ].object;
+		// 		content.innerHTML = INTERSECTED.name + "被点击";
+		// 		layer.style.visibility = "visible";
+		// 		INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+		// 		INTERSECTED.material.emissive.setHex( 0xff0000 );
+		// 	}
 
-		} else {
-			if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+		// } else {
+		// 	if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
 
-			INTERSECTED = null;
+		// 	INTERSECTED = null;
 
-		}
+		// }
 
 		renderer.render( scene, camera );
 
