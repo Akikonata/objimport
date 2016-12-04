@@ -144,12 +144,11 @@
 				scene.add( object );
 			}, onProgress, onError );
 		});
-		$('body').on('swipeDown', function(){
-			alert('aaa');
-		});
-		renderer = new THREE.WebGLRenderer({
-			antialias:true
-		});
+		alert('test');
+		// $('body').on('swipeDown', function(){
+		// 	alert('aaa');
+		// });
+		renderer = new THREE.WebGLRenderer({antialias:true});
 		renderer.setPixelRatio( window.devicePixelRatio );
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		container.appendChild( renderer.domElement );
