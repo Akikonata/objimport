@@ -34,9 +34,13 @@
 				text-align:center;
 				background: rgba(255,255,255,.7);
 			}
+			#tip{
+				position: absolute;
+
+			}
 	</style>
 </head>
-<script src="zepto.min.js"></script>
+<script src="zepto.js"></script>
 <!--three.js库文件-->
 <script src="three.min.js"></script>
 <!--用于加载mtl格式的材质库文件-->
@@ -44,6 +48,7 @@
 <!--用于加载obj格式的模型网格文件-->
 <script src="loaders/OBJLoader.js"></script>
 <body>
+    <p id="tip">下滑切换</p>
 	<div id="layer">
 		<p id="content">这是一个弹窗示例</p>
 		<div id="close">关闭</div>
@@ -57,6 +62,7 @@
 	mouse.x = -9999;
 	mouse.y = -9999;
 	var Objs = [];
+	var objPositions = [- 700, - 1000, -1300, -1600];
 	var layer = document.getElementById('layer');
 	var content =  document.getElementById('content');
 	var close =  document.getElementById('close');
@@ -73,7 +79,7 @@
 		container = document.createElement( 'div' );
 		document.body.appendChild( container );
 
-		camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+		camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1000 );
 		camera.position.z = 0;
 
 		// scene
@@ -97,8 +103,14 @@
 			}
 		};
 
-		var onError = function ( xhr ) { };
-
+		var onError = function ( xhr ) { 
+			alert('模型加载失败，请刷新页面重新加载');
+		};
+		function setObjPositions(){	
+			Objs.forEach(function(o,i){
+				o.position.z = objPositions[i];
+			});
+		}
 		var mtlLoader = new THREE.MTLLoader();
 		mtlLoader.setPath( 'obj/' );
 		mtlLoader.load( '蓝色球.mtl', function( materials ) {
@@ -108,10 +120,10 @@
 			objLoader.setPath( 'obj/' );
 			objLoader.load( '蓝色球.obj', function ( object ) {
 				Objs.push(object);
-				// Obj.children.forEach(function(o){
-				// 	o.material = o.material.clone();
-				// });
 				scene.add( object );
+				if(Objs.length === 4){
+					setObjPositions();
+				}
 			}, onProgress, onError );
 		});
 		mtlLoader.load( '裂缝星球.mtl', function( materials ) {
@@ -122,6 +134,9 @@
 			objLoader.load( '裂缝星球.obj', function ( object ) {
 				Objs.push(object);
 				scene.add( object );
+				if(Objs.length === 4){
+					setObjPositions();
+				}
 			}, onProgress, onError );
 		});
 		mtlLoader.load( '小转星球.mtl', function( materials ) {
@@ -132,6 +147,9 @@
 			objLoader.load( '小转星球.obj', function ( object ) {
 				Objs.push(object);
 				scene.add( object );
+				if(Objs.length === 4){
+					setObjPositions();
+				}
 			}, onProgress, onError );
 		});
 		mtlLoader.load( '小刺.mtl', function( materials ) {
@@ -142,12 +160,16 @@
 			objLoader.load( '小刺.obj', function ( object ) {
 				Objs.push(object);
 				scene.add( object );
+				if(Objs.length === 4){
+					setObjPositions();
+				}
 			}, onProgress, onError );
 		});
-		alert('test');
-		// $('body').on('swipeDown', function(){
-		// 	alert('aaa');
-		// });
+
+		document.ontouchmove = function(ev){ev.preventDefault()}
+		$('body').on('swipeDown', function(){
+			
+		});
 		renderer = new THREE.WebGLRenderer({antialias:true});
 		renderer.setPixelRatio( window.devicePixelRatio );
 		renderer.setSize( window.innerWidth, window.innerHeight );
