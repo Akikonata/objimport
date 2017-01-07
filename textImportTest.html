@@ -2,44 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-	<title>手机版示例</title>
-	<style>
-		body {
-				font-family: Monospace;
-				background-color: #000;
-				color: #fff;
-				margin: 0px;
-				overflow: hidden;
-			}
-			#layer{
-				visibility: hidden;
-				padding:150px 100px;
-				width: 100px;
-				background: rgba(255,255,255,.7);
-				border: 1px solid white;
-				position: absolute;
-				left: 50%;
-				margin-left: -150px;
-				top: 100px;
-				text-align: center;
-				border-radius: 5px;
-			}
-			#close{
-				position: absolute;
-				padding: 5px 20px;
-				border-radius: 5px;
-				right: 0;
-				top: -40px;
-				text-align:center;
-				background: rgba(255,255,255,.7);
-			}
-			#tip{
-				position: absolute;
-				width: 100%;
-				text-align: center;
-			}
-	</style>
+	<title>Document</title>
 </head>
 <script src="zepto.js"></script>
 <script src="tween.min.js"></script>
@@ -50,11 +13,7 @@
 <!--用于加载obj格式的模型网格文件-->
 <script src="loaders/OBJLoader.js"></script>
 <body>
-    <p id="tip">下滑切换</p>
-	<div id="layer">
-		<p id="content">这是一个弹窗示例</p>
-		<div id="close">关闭</div>
-	</div>
+	
 </body>
 <script>
 	var container;
@@ -71,7 +30,9 @@
 
 	var windowHalfX = window.innerWidth / 2;
 	var windowHalfY = window.innerHeight / 2;
-
+	var textMaterial = new THREE.MeshBasicMaterial( {
+        color: 0x26dffd
+    } );
 	init();
 	animate();
 
@@ -119,12 +80,19 @@
 		}
 		var mtlLoader = new THREE.MTLLoader();
 		mtlLoader.setPath( 'obj/' );
-		mtlLoader.load( '蓝色球.mtl', function( materials ) {
+		mtlLoader.load( 'ball.mtl', function( materials ) {
 			materials.preload();
 			var objLoader = new THREE.OBJLoader();
-			objLoader.setMaterials( materials );
+			//objLoader.setMaterials( materials );
 			objLoader.setPath( 'obj/' );
-			objLoader.load( '蓝色球.obj', function ( object ) {
+			objLoader.load( 'pm.obj', function ( object ) {
+				console.log(object);
+				object.scale.x = .5;
+				object.scale.y = .5;
+				object.scale.z = .5;
+				object.children.forEach(function(textchild){
+					textchild.material = textMaterial;
+				}) 
 				Objs.push(object);
 				scene.add( object );
 				if(Objs.length === 4){
@@ -195,12 +163,6 @@
 
 		document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 		document.addEventListener('touchstart',onDocumentTouchDown, false);
-		close.addEventListener( 'mousedown', function(event){
-			layer.style.visibility = 'hidden';
-		}, false );
-		close.addEventListener('touchstart', function(event){
-			layer.style.visibility = 'hidden';
-		}, false);
 
 		window.addEventListener( 'resize', onWindowResize, false );
 
@@ -224,7 +186,6 @@
 
 		mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 		mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-		console.log(mouse);
 	}
 
 	function onDocumentTouchDown(event){
@@ -238,36 +199,6 @@
 	}
 
 	function render() {
-
-		// camera.position.x += ( mouseX - camera.position.x ) * .05;
-		// camera.position.y += ( - mouseY - camera.position.y ) * .05;
-		// if(!Obj) return;
-		// Obj.rotation.y += .005;
-		// find intersections
-
-		// raycaster.setFromCamera( mouse, camera );
-
-		// var intersects = raycaster.intersectObjects( scene.children[1].children );
-
-		// if ( intersects.length > 0 ) {
-		// 	if ( INTERSECTED != intersects[ 0 ].object ) {
-
-		// 		if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
-
-		// 		INTERSECTED = intersects[ 0 ].object;
-		// 		content.innerHTML = INTERSECTED.name + "被点击";
-		// 		layer.style.visibility = "visible";
-		// 		INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-		// 		INTERSECTED.material.emissive.setHex( 0xff0000 );
-		// 	}
-
-		// } else {
-		// 	if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
-
-		// 	INTERSECTED = null;
-
-		// }
-
 		renderer.render( scene, camera );
 
 	}
